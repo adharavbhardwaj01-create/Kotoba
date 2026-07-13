@@ -76,6 +76,7 @@ export const SCENARIOS = [
 
 export const TABS = [
   { id: "chat", label: "Chat", jp: "会話" },
+  { id: "lessons", label: "Lessons", jp: "レッスン" },
   { id: "alphabet", label: "Alphabet", jp: "文字" },
   { id: "vocab", label: "Vocab", jp: "単語" },
   { id: "dictionary", label: "Dictionary", jp: "辞書" },

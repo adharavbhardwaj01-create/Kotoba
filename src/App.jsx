@@ -4,6 +4,7 @@ import { useAppStore } from "./store/appStore"
 import GlobalStyle from "./styles/GlobalStyle"
 import Layout from "./components/layout/Layout"
 import ChatTab from "./components/chat/ChatTab"
+import LessonsTab from "./features/lessons/LessonsTab"
 import AlphabetTab from "./components/alphabet/AlphabetTab"
 import VocabTab from "./components/vocab/VocabTab"
 import DictionaryTab from "./components/dictionary/DictionaryTab"
@@ -34,6 +35,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route index element={<Navigate to="/chat" replace />} />
           <Route path="/chat" element={<ChatTab />} />
+          <Route path="/lessons" element={<LessonsTab />} />
           <Route path="/alphabet" element={<AlphabetTab />} />
           <Route path="/vocab" element={<VocabTab />} />
           <Route path="/dictionary" element={<DictionaryTab />} />
