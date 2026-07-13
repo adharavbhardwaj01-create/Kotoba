@@ -1,5 +1,5 @@
 import { useAppStore } from "../../store/appStore"
-import { askGorp, parseJSONLoose } from "../../api/gorp"
+import { askGorp, parseJSONLoose, translateFree, isJapanese } from "../../api/gorp"
 import SpeakerBtn from "../ui/SpeakerBtn"
 
 export default function TranslateTab() {
@@ -21,22 +21,39 @@ export default function TranslateTab() {
     setTranslateError("")
     setTranslateResult(null)
 
-    const system = `You are a Japanese-English translator and grammar teacher for a ${level} level student.
+    const inputIsJa = isJapanese(translateInput)
+    const sourceLang = inputIsJa ? "ja" : "en"
+    const targetLang = inputIsJa ? "en" : "ja"
+
+    // Try Gorp API first (full-featured translation with breakdown)
+    try {
+      const system = `You are a Japanese-English translator and grammar teacher for a ${level} level student.
 Detect if the input is English or Japanese. Translate it to the other language.
 Respond ONLY with raw JSON (no markdown fences), shaped exactly:
 {"input_lang":"en" or "ja","translation":"the translation","romaji":"romanized reading of the Japanese (input or output, whichever is Japanese)","breakdown":[{"word":"...","reading":"...","meaning":"...","grammar":"short grammar note, e.g. particle, past tense, verb"}]}
 The breakdown must cover the Japanese sentence word by word, in order.`
 
-    try {
       const raw = await askGorp(system, [{ role: "user", content: translateInput }])
       const parsed = parseJSONLoose(raw)
       if (parsed && parsed.translation) {
         setTranslateResult(parsed)
-      } else {
-        setTranslateError("Could not parse a translation — try rephrasing.")
+        return
       }
     } catch (e) {
-      setTranslateError("Something went wrong translating that.")
+      // Gorp API failed, fall through to free translation
+    }
+
+    // Fallback: Free translation using MyMemory
+    try {
+      const translation = await translateFree(translateInput, sourceLang, targetLang)
+      setTranslateResult({
+        input_lang: sourceLang,
+        translation,
+        romaji: "",
+        breakdown: [],
+      })
+    } catch (e) {
+      setTranslateError("Translation failed. Please try again.")
     } finally {
       setTranslateLoading(false)
     }
@@ -133,6 +150,11 @@ The breakdown must cover the Japanese sentence word by word, in order.`
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+          {!translateResult.breakdown?.length && translateResult.input_lang === "ja" && (
+            <div style={{ marginTop: 12, fontSize: 12, color: "var(--ink-soft)", textAlign: "center" }}>
+              Add Gorp API key for word-by-word breakdown
             </div>
           )}
         </div>

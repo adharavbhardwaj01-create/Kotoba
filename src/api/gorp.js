@@ -48,3 +48,23 @@ export function parseJSONLoose(text) {
     }
   }
 }
+
+// Free translation using MyMemory API (no key required, 5000 chars/day)
+export async function translateFree(text, sourceLang, targetLang) {
+  const langPair = `${sourceLang}|${targetLang}`
+  const res = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`
+  )
+  const data = await res.json()
+
+  if (data.responseStatus === 200 && data.responseData?.translatedText) {
+    return data.responseData.translatedText
+  }
+  throw new Error(data.responseDetails || "Translation failed")
+}
+
+// Detect if text is Japanese
+export function isJapanese(text) {
+  const jaRegex = /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\uF900-\uFAFF]/
+  return jaRegex.test(text)
+}
