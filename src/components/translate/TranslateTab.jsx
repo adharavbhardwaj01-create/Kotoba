@@ -1,10 +1,9 @@
 import { useAppStore } from "../../store/appStore"
-import { askGorp, parseJSONLoose, translateFree, isJapanese } from "../../api/gorp"
+import { translateFree, isJapanese } from "../../api/gorp"
 import SpeakerBtn from "../ui/SpeakerBtn"
 
 export default function TranslateTab() {
   const {
-    level,
     translateInput,
     setTranslateInput,
     translateResult,
@@ -25,32 +24,11 @@ export default function TranslateTab() {
     const sourceLang = inputIsJa ? "ja" : "en"
     const targetLang = inputIsJa ? "en" : "ja"
 
-    // Try Gorp API first (full-featured translation with breakdown)
-    try {
-      const system = `You are a Japanese-English translator and grammar teacher for a ${level} level student.
-Detect if the input is English or Japanese. Translate it to the other language.
-Respond ONLY with raw JSON (no markdown fences), shaped exactly:
-{"input_lang":"en" or "ja","translation":"the translation","romaji":"romanized reading of the Japanese (input or output, whichever is Japanese)","breakdown":[{"word":"...","reading":"...","meaning":"...","grammar":"short grammar note, e.g. particle, past tense, verb"}]}
-The breakdown must cover the Japanese sentence word by word, in order.`
-
-      const raw = await askGorp(system, [{ role: "user", content: translateInput }])
-      const parsed = parseJSONLoose(raw)
-      if (parsed && parsed.translation) {
-        setTranslateResult(parsed)
-        return
-      }
-    } catch (e) {
-      // Gorp API failed, fall through to free translation
-    }
-
-    // Fallback: Free translation using MyMemory
     try {
       const translation = await translateFree(translateInput, sourceLang, targetLang)
       setTranslateResult({
         input_lang: sourceLang,
         translation,
-        romaji: "",
-        breakdown: [],
       })
     } catch (e) {
       setTranslateError("Translation failed. Please try again.")
@@ -64,6 +42,7 @@ The breakdown must cover the Japanese sentence word by word, in order.`
       <textarea
         value={translateInput}
         onChange={(e) => setTranslateInput(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), translate())}
         placeholder="Type in English or Japanese…"
         rows={3}
         style={{
@@ -105,7 +84,6 @@ The breakdown must cover the Japanese sentence word by word, in order.`
               border: "1px solid var(--paper-dim)",
               borderRadius: 14,
               padding: 16,
-              marginBottom: 16,
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -116,47 +94,7 @@ The breakdown must cover the Japanese sentence word by word, in order.`
                 <SpeakerBtn text={translateResult.translation} size={13} />
               )}
             </div>
-            {translateResult.romaji && (
-              <div className="mono" style={{ fontSize: 13, color: "var(--gold)", marginTop: 6 }}>
-                {translateResult.romaji}
-              </div>
-            )}
           </div>
-          {Array.isArray(translateResult.breakdown) && translateResult.breakdown.length > 0 && (
-            <div>
-              <div className="disp" style={{ fontWeight: 700, marginBottom: 8, fontSize: 15 }}>
-                分解 · Word by word
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {translateResult.breakdown.map((w, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1.4fr 1.4fr",
-                      gap: 10,
-                      background: "#fff",
-                      border: "1px solid var(--paper-dim)",
-                      borderRadius: 10,
-                      padding: "8px 12px",
-                      fontSize: 13,
-                      alignItems: "center",
-                    }}
-                  >
-                    <span className="disp" style={{ fontWeight: 700 }}>{w.word}</span>
-                    <span className="mono" style={{ color: "var(--gold)" }}>{w.reading}</span>
-                    <span>{w.meaning}</span>
-                    <span style={{ color: "var(--ink-soft)", fontSize: 12 }}>{w.grammar}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {!translateResult.breakdown?.length && translateResult.input_lang === "ja" && (
-            <div style={{ marginTop: 12, fontSize: 12, color: "var(--ink-soft)", textAlign: "center" }}>
-              Add Gorp API key for word-by-word breakdown
-            </div>
-          )}
         </div>
       )}
     </div>
