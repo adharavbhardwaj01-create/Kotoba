@@ -78,5 +78,6 @@ export const TABS = [
   { id: "chat", label: "Chat", jp: "会話" },
   { id: "alphabet", label: "Alphabet", jp: "文字" },
   { id: "vocab", label: "Vocab", jp: "単語" },
+  { id: "dictionary", label: "Dictionary", jp: "辞書" },
   { id: "translate", label: "Translate", jp: "翻訳" },
 ]

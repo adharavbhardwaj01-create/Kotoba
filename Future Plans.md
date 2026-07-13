@@ -218,6 +218,12 @@
 - [ ] Reading practice (graded readers)
 - [ ] JLPT level-based progression (N5 → N1)
 
+### Dictionary & Reference
+- [ ] Offline dictionary (JMdict JSON)
+- [ ] Kanji lookup with readings/meanings
+- [ ] Stroke order visualization (KanjiVG)
+- [ ] Example sentences (Tatoeba)
+
 ### Gamification
 - [ ] Daily streaks with rewards
 - [ ] Leaderboards / progress sharing
@@ -237,10 +243,19 @@
 - [ ] Spaced repetition scheduling
 
 ### Tech & Infrastructure
-- [ ] Gorp API integration (replace Claude)
+- [x] Gorp API integration (replace Claude)
 - [ ] Google OAuth login
 - [ ] Cloud sync (multi-device)
 - [ ] IndexedDB for offline storage
+
+### Free Resources (Researched 2026-07-13)
+- [x] Dictionary: JMdict JSON (200K+ entries, offline) + Jisho API (online fallback)
+- [x] Kanji Data: KANJIDIC2 + KanjiVG (stroke order SVGs, CC-licensed)
+- [x] JLPT Data: OpenJLPT (8,334 words, N5-N1, JSON/SQLite)
+- [x] TTS: Web Speech API (MVP) → VOICEVOX (production, 40+ voices)
+- [x] Speech Recognition: Web Speech API (browser) → Vosk (48MB offline)
+- [x] SRS: FSRS algorithm (MIT, ML-optimized)
+- Full report: `research/kotoba-free-resources/REPORT.md`
 
 ### Privacy & Compliance
 - [ ] Privacy policy

@@ -6,6 +6,7 @@ import Layout from "./components/layout/Layout"
 import ChatTab from "./components/chat/ChatTab"
 import AlphabetTab from "./components/alphabet/AlphabetTab"
 import VocabTab from "./components/vocab/VocabTab"
+import DictionaryTab from "./components/dictionary/DictionaryTab"
 import TranslateTab from "./components/translate/TranslateTab"
 
 function LoadingScreen() {
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/chat" element={<ChatTab />} />
           <Route path="/alphabet" element={<AlphabetTab />} />
           <Route path="/vocab" element={<VocabTab />} />
+          <Route path="/dictionary" element={<DictionaryTab />} />
           <Route path="/translate" element={<TranslateTab />} />
           <Route path="*" element={<Navigate to="/chat" replace />} />
         </Route>
