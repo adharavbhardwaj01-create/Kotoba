@@ -37,61 +37,97 @@ export default function TranslateTab() {
     }
   }
 
+  const inputIsJa = isJapanese(translateInput)
+
   return (
     <div style={{ padding: 16 }}>
-      <textarea
-        value={translateInput}
-        onChange={(e) => setTranslateInput(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), translate())}
-        placeholder="Type in English or Japanese…"
-        rows={3}
-        style={{
-          width: "100%",
-          padding: 12,
-          borderRadius: 12,
-          border: "1px solid var(--ink-soft)",
-          fontSize: 15,
-          resize: "vertical",
-          background: "#fff",
-        }}
-      />
+      {/* Input area */}
+      <div className="card" style={{ padding: 16, marginBottom: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+          <span
+            style={{
+              fontSize: 10,
+              color: "var(--ink-faint)",
+              background: "var(--paper-light)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            {inputIsJa ? "日本語" : "English"}
+          </span>
+          <span style={{ fontSize: 10, color: "var(--ink-faint)" }}>→</span>
+          <span
+            style={{
+              fontSize: 10,
+              color: "var(--ink-faint)",
+              background: "var(--paper-light)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            {inputIsJa ? "English" : "日本語"}
+          </span>
+        </div>
+        <textarea
+          value={translateInput}
+          onChange={(e) => setTranslateInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), translate())}
+          placeholder="Type in English or Japanese…"
+          rows={3}
+          className="input"
+          style={{ resize: "none", fontSize: 16, lineHeight: 1.5 }}
+        />
+      </div>
+
+      {/* Translate button */}
       <button
         onClick={translate}
-        disabled={translateLoading}
+        disabled={translateLoading || !translateInput.trim()}
+        className="btn-primary"
         style={{
-          marginTop: 10,
-          border: "none",
-          borderRadius: 20,
-          padding: "9px 22px",
-          background: "var(--vermillion)",
-          color: "#fff",
-          fontWeight: 700,
-          cursor: "pointer",
+          width: "100%",
+          padding: "12px",
+          opacity: translateLoading || !translateInput.trim() ? 0.5 : 1,
         }}
       >
-        {translateLoading ? "翻訳中…" : "Translate"}
+        {translateLoading ? (
+          <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+            <span className="pulse">翻訳中…</span>
+          </span>
+        ) : (
+          "Translate"
+        )}
       </button>
+
+      {/* Error */}
       {translateError && (
-        <div style={{ color: "var(--vermillion)", fontSize: 13, marginTop: 10 }}>
+        <div
+          style={{
+            marginTop: 12,
+            padding: "10px 14px",
+            borderRadius: 10,
+            background: "rgba(193,67,42,0.06)",
+            border: "1px solid rgba(193,67,42,0.15)",
+            color: "var(--vermillion)",
+            fontSize: 13,
+          }}
+        >
           {translateError}
         </div>
       )}
+
+      {/* Result */}
       {translateResult && (
-        <div style={{ marginTop: 20 }}>
-          <div
-            style={{
-              background: "#fff",
-              border: "1px solid var(--paper-dim)",
-              borderRadius: 14,
-              padding: 16,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span className="disp" style={{ fontSize: 21, fontWeight: 700 }}>
-                {translateResult.translation}
-              </span>
+        <div className="fade-in" style={{ marginTop: 16 }}>
+          <div className="card" style={{ padding: 20 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+              <div style={{ flex: 1 }}>
+                <span className="disp" style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4 }}>
+                  {translateResult.translation}
+                </span>
+              </div>
               {translateResult.input_lang === "en" && (
-                <SpeakerBtn text={translateResult.translation} size={13} />
+                <SpeakerBtn text={translateResult.translation} size={14} />
               )}
             </div>
           </div>

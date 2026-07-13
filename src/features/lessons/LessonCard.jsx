@@ -13,46 +13,49 @@ function VocabCard({ step, onComplete }) {
 
   return (
     <div
+      className="card card-interactive"
       style={{
-        background: "#fff",
-        border: "1px solid var(--paper-dim)",
-        borderRadius: 16,
-        padding: 24,
+        padding: 32,
         textAlign: "center",
-        minHeight: 200,
+        minHeight: 220,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
+        background: "linear-gradient(180deg, #fff 0%, var(--paper-light) 100%)",
       }}
       onClick={() => setFlipped(!flipped)}
     >
       {!flipped ? (
         <>
-          <span className="disp" style={{ fontSize: 48, fontWeight: 800, color: "var(--indigo)" }}>
+          <span className="disp" style={{ fontSize: 52, fontWeight: 800, color: "var(--indigo)", lineHeight: 1.2 }}>
             {step.word}
           </span>
-          <div className="mono" style={{ fontSize: 16, color: "var(--gold)", marginTop: 12 }}>
+          <div className="mono" style={{ fontSize: 15, color: "var(--gold)", marginTop: 12, letterSpacing: "0.03em" }}>
             {step.reading}
           </div>
-          <SpeakerBtn text={step.audio || step.word} size={18} />
-          <div style={{ marginTop: 16, fontSize: 12, color: "var(--ink-soft)" }}>
+          <div style={{ marginTop: 16 }}>
+            <SpeakerBtn text={step.audio || step.word} size={16} />
+          </div>
+          <div style={{ marginTop: 16, fontSize: 11, color: "var(--ink-faint)" }}>
             Tap to reveal meaning
           </div>
         </>
       ) : (
         <>
-          <span className="disp" style={{ fontSize: 36, fontWeight: 800, color: "var(--indigo)" }}>
+          <span className="disp" style={{ fontSize: 36, fontWeight: 800, color: "var(--indigo)", lineHeight: 1.2 }}>
             {step.word}
           </span>
-          <div className="mono" style={{ fontSize: 14, color: "var(--gold)", marginTop: 8 }}>
+          <div className="mono" style={{ fontSize: 13, color: "var(--gold)", marginTop: 8 }}>
             {step.reading}
           </div>
-          <div style={{ fontSize: 20, fontWeight: 600, marginTop: 12 }}>
+          <div style={{ fontSize: 22, fontWeight: 600, marginTop: 16, color: "var(--ink)" }}>
             {step.meaning}
           </div>
-          <SpeakerBtn text={step.audio || step.word} size={18} />
+          <div style={{ marginTop: 12 }}>
+            <SpeakerBtn text={step.audio || step.word} size={16} />
+          </div>
         </>
       )}
     </div>
@@ -71,21 +74,14 @@ function QuizCard({ step, onComplete }) {
   }
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid var(--paper-dim)",
-        borderRadius: 16,
-        padding: 24,
-      }}
-    >
-      <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 20, textAlign: "center" }}>
+    <div className="card" style={{ padding: 24 }}>
+      <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 20, textAlign: "center", lineHeight: 1.5 }}>
         {step.question}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {step.options.map((opt, idx) => {
-          let bg = "transparent"
-          let border = "1px solid var(--ink-soft)"
+          let bg = "#fff"
+          let border = "1px solid var(--paper-dim)"
           let color = "var(--ink)"
 
           if (answered) {
@@ -99,7 +95,7 @@ function QuizCard({ step, onComplete }) {
               color = "#fff"
             }
           } else if (idx === selected) {
-            bg = "rgba(44, 71, 112, 0.1)"
+            bg = "rgba(44, 71, 112, 0.08)"
             border = "2px solid var(--indigo)"
           }
 
@@ -108,7 +104,7 @@ function QuizCard({ step, onComplete }) {
               key={idx}
               onClick={() => handleSelect(idx)}
               style={{
-                padding: "12px 16px",
+                padding: "14px 16px",
                 borderRadius: 12,
                 border,
                 background: bg,
@@ -116,6 +112,8 @@ function QuizCard({ step, onComplete }) {
                 fontSize: 15,
                 cursor: answered ? "default" : "pointer",
                 textAlign: "left",
+                transition: "all 0.2s ease",
+                boxShadow: answered && idx === step.correct ? "0 2px 8px rgba(94,122,60,0.2)" : "none",
               }}
             >
               {opt}
@@ -172,18 +170,11 @@ function MatchCard({ step, onComplete }) {
   }
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid var(--paper-dim)",
-        borderRadius: 16,
-        padding: 24,
-      }}
-    >
-      <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16, textAlign: "center" }}>
+    <div className="card" style={{ padding: 24 }}>
+      <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 16, textAlign: "center", color: "var(--ink-soft)" }}>
         Match Japanese to English
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {step.pairs.map((pair) => {
             const isMatched = matched.includes(pair.jp)
@@ -194,7 +185,7 @@ function MatchCard({ step, onComplete }) {
                 onClick={() => handleSelectJp(pair)}
                 className="disp"
                 style={{
-                  padding: "12px",
+                  padding: "14px 12px",
                   borderRadius: 10,
                   border: isMatched
                     ? "2px solid var(--bamboo)"
@@ -204,12 +195,14 @@ function MatchCard({ step, onComplete }) {
                   background: isMatched
                     ? "var(--bamboo)"
                     : isSelected
-                    ? "rgba(44, 71, 112, 0.1)"
+                    ? "rgba(44, 71, 112, 0.08)"
                     : "#fff",
                   color: isMatched ? "#fff" : "var(--ink)",
                   fontSize: 18,
                   fontWeight: 700,
                   cursor: isMatched ? "default" : "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: isMatched ? "0 2px 6px rgba(94,122,60,0.2)" : "none",
                 }}
               >
                 {pair.jp}
@@ -226,7 +219,7 @@ function MatchCard({ step, onComplete }) {
                 key={pair.jp}
                 onClick={() => handleSelectEn(pair)}
                 style={{
-                  padding: "12px",
+                  padding: "14px 12px",
                   borderRadius: 10,
                   border: isMatched
                     ? "2px solid var(--bamboo)"
@@ -236,11 +229,13 @@ function MatchCard({ step, onComplete }) {
                   background: isMatched
                     ? "var(--bamboo)"
                     : isSelected
-                    ? "rgba(44, 71, 112, 0.1)"
+                    ? "rgba(44, 71, 112, 0.08)"
                     : "#fff",
                   color: isMatched ? "#fff" : "var(--ink)",
-                  fontSize: 15,
+                  fontSize: 14,
                   cursor: isMatched ? "default" : "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: isMatched ? "0 2px 6px rgba(94,122,60,0.2)" : "none",
                 }}
               >
                 {pair.en}

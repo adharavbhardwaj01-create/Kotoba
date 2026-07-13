@@ -21,46 +21,28 @@ export default function LessonPage() {
     return (
       <div style={{ padding: 16, textAlign: "center" }}>
         <div
-          style={{
-            background: "#fff",
-            border: "1px solid var(--paper-dim)",
-            borderRadius: 16,
-            padding: 32,
-          }}
+          className="card slide-up"
+          style={{ padding: 40 }}
         >
-          <div className="stamp-anim" style={{ fontSize: 64, marginBottom: 16 }}>🎉</div>
-          <div className="disp" style={{ fontSize: 24, fontWeight: 800, color: "var(--indigo)", marginBottom: 8 }}>
+          <div className="stamp-anim" style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
+          <div className="disp" style={{ fontSize: 28, fontWeight: 800, color: "var(--indigo)", marginBottom: 8 }}>
             おめでとう！
           </div>
-          <div style={{ fontSize: 16, color: "var(--ink-soft)", marginBottom: 24 }}>
+          <div style={{ fontSize: 15, color: "var(--ink-soft)", marginBottom: 28 }}>
             Lesson Complete!
           </div>
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
             <button
               onClick={() => { resetLesson(); exitLesson() }}
-              style={{
-                padding: "10px 20px",
-                borderRadius: 20,
-                border: "1px solid var(--ink-soft)",
-                background: "transparent",
-                color: "var(--ink)",
-                cursor: "pointer",
-                fontWeight: 600,
-              }}
+              className="btn-outline"
+              style={{ padding: "12px 24px" }}
             >
               Back to Lessons
             </button>
             <button
               onClick={() => { resetLesson(); exitLesson() }}
-              style={{
-                padding: "10px 20px",
-                borderRadius: 20,
-                border: "none",
-                background: "var(--vermillion)",
-                color: "#fff",
-                cursor: "pointer",
-                fontWeight: 700,
-              }}
+              className="btn-primary"
+              style={{ padding: "12px 24px" }}
             >
               Next Lesson
             </button>
@@ -77,20 +59,27 @@ export default function LessonPage() {
         <button
           onClick={exitLesson}
           style={{
-            border: "none",
-            background: "transparent",
-            fontSize: 20,
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            border: "1px solid var(--paper-dim)",
+            background: "#fff",
+            fontSize: 16,
             cursor: "pointer",
             color: "var(--ink-soft)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s ease",
           }}
         >
           ←
         </button>
         <div style={{ flex: 1 }}>
-          <div className="disp" style={{ fontSize: 18, fontWeight: 700 }}>
+          <div className="disp" style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.3 }}>
             {currentLesson.titleJp} · {currentLesson.title}
           </div>
-          <div style={{ fontSize: 12, color: "var(--ink-soft)" }}>
+          <div style={{ fontSize: 11, color: "var(--ink-faint)", marginTop: 2 }}>
             Step {currentStep + 1} of {currentLesson.steps.length}
           </div>
         </div>
@@ -99,7 +88,7 @@ export default function LessonPage() {
       {/* Progress bar */}
       <div
         style={{
-          height: 4,
+          height: 3,
           background: "var(--paper-dim)",
           borderRadius: 2,
           marginBottom: 20,
@@ -110,9 +99,9 @@ export default function LessonPage() {
           style={{
             height: "100%",
             width: `${progress}%`,
-            background: "var(--vermillion)",
+            background: "linear-gradient(90deg, var(--vermillion) 0%, var(--vermillion-light) 100%)",
             borderRadius: 2,
-            transition: "width 0.3s ease",
+            transition: "width 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         />
       </div>
@@ -127,37 +116,29 @@ export default function LessonPage() {
       />
 
       {/* Navigation */}
-      <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
+      <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
         <button
           onClick={prevStep}
           disabled={currentStep === 0}
+          className="btn-outline"
           style={{
             flex: 1,
             padding: "12px",
-            borderRadius: 12,
-            border: "1px solid var(--ink-soft)",
-            background: "transparent",
-            color: currentStep === 0 ? "var(--ink-soft)" : "var(--ink)",
+            opacity: currentStep === 0 ? 0.4 : 1,
             cursor: currentStep === 0 ? "default" : "pointer",
-            fontWeight: 600,
           }}
         >
           ← Back
         </button>
         <button
           onClick={nextStep}
+          className="btn-primary"
           style={{
             flex: 2,
             padding: "12px",
-            borderRadius: 12,
-            border: "none",
-            background: "var(--vermillion)",
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: 700,
           }}
         >
-          {currentStep === currentLesson.steps.length - 1 ? "Complete" : "Next →"}
+          {currentStep === currentLesson.steps.length - 1 ? "Complete ✓" : "Next →"}
         </button>
       </div>
     </div>

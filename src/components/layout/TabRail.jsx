@@ -5,51 +5,54 @@ export default function TabRail() {
   return (
     <div
       style={{
-        width: 84,
-        background: "var(--indigo-deep)",
+        width: 76,
+        background: "linear-gradient(180deg, var(--indigo-deep) 0%, #162240 100%)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         padding: "20px 0",
         flexShrink: 0,
+        borderRight: "1px solid rgba(255,255,255,0.05)",
       }}
     >
       <div
         className="disp"
         style={{
-          color: "#fff",
+          color: "rgba(255,255,255,0.9)",
           fontWeight: 800,
-          fontSize: 22,
+          fontSize: 18,
           marginBottom: 28,
           writingMode: "vertical-rl",
+          letterSpacing: "0.1em",
         }}
       >
         コトバ
       </div>
-      {TABS.map((t) => (
-        <NavLink
-          key={t.id}
-          to={`/${t.id}`}
-          style={({ isActive }) => ({
-            width: 60,
-            marginBottom: 10,
-            padding: "10px 0",
-            borderRadius: 10,
-            cursor: "pointer",
-            border: "none",
-            background: isActive ? "var(--vermillion)" : "transparent",
-            color: isActive ? "#fff" : "#c8d2e0",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 3,
-            textDecoration: "none",
-          })}
-        >
-          <span className="disp" style={{ fontSize: 18, fontWeight: 700 }}>{t.jp}</span>
-          <span style={{ fontSize: 9.5 }}>{t.label}</span>
-        </NavLink>
-      ))}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, width: "100%", padding: "0 8px" }}>
+        {TABS.map((t) => (
+          <NavLink
+            key={t.id}
+            to={`/${t.id}`}
+            style={({ isActive }) => ({
+              padding: "10px 0",
+              borderRadius: 10,
+              cursor: "pointer",
+              border: "none",
+              background: isActive ? "var(--vermillion)" : "transparent",
+              color: isActive ? "#fff" : "rgba(200,210,224,0.7)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
+              textDecoration: "none",
+              transition: "all 0.2s ease",
+            })}
+          >
+            <span className="disp" style={{ fontSize: 16, fontWeight: 700 }}>{t.jp}</span>
+            <span style={{ fontSize: 9, opacity: 0.8 }}>{t.label}</span>
+          </NavLink>
+        ))}
+      </div>
     </div>
   )
 }
